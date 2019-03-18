@@ -3,6 +3,41 @@ import { Link } from 'react-router-dom';
 import * as BooksAPI from "./BooksAPI";
 
 class BookSearch extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            BooksList: []
+        }
+    }
+
+    maximumOfBookObjects = 20
+
+    searchBooks = (searchQuery) => {
+        if(searchQuery) {
+            BooksAPI.search(searchQuery, this.maximumOfBookObjects).then((searchableBooks) => {
+                if(searchableBooks.length) {
+                    searchableBooks.forEach((book) => {
+                        let BooksInShelves = this.props.books.find((currentBook) => currentBook.id === book.id)
+                        if(BooksInShelves) {
+                            book.shelf = BooksInShelves.shelf
+                        } else {
+                            book.shelf = 'none'
+                        }
+                    });
+                }
+                this.setState({
+                    BooksList: searchableBooks
+                });
+            });
+        }
+        else {
+            this.setState({
+                BooksList: ''
+            })
+        }
+    }
+
     render() {
         return (
             <div className="search-books">
@@ -20,6 +55,7 @@ class BookSearch extends Component {
                         <input 
                         type="text" 
                         placeholder="Search by title or author"
+                        onChange={(event) => this.searchBooks(event.target.value)}
                         />
                     </div>
                 </div>
