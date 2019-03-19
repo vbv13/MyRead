@@ -1,4 +1,4 @@
 [build]
-base = "MyRead/"
-publish = "MyRead/build/"
-command = "npm run build"
+base = "myapp/"
+publish = "myapp/build/"
+command = "yarn build"
