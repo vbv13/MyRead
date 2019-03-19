@@ -1,0 +1,4 @@
+[build]
+base = "MyRead/"
+publish = "MyRead/build/"
+command = "npm run build"
