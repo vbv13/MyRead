@@ -7,7 +7,7 @@ class Book extends Component {
       super(props);
       this.state = {
         currentShelfOfBook: this.props.book.shelf,
-        updatingBookShelf: false
+        //updatingBookShelf: false
       }
     }
 
@@ -15,15 +15,15 @@ class Book extends Component {
         this.props.changeBookShelf(this.props.book, event.target.value);
         this.setState({
           currentShelfOfBook: event.target.value,
-          updatingBookShelf: true
+          //updatingBookShelf: true
         })  
   }
 
-    componentWillReceiveProps() {
+    /*componentWillReceiveProps() {
       this.setState({
         updatingBookShelf: false
       })
-    }
+    }*/
 
     render() {
         return (
@@ -32,7 +32,7 @@ class Book extends Component {
               <div className="book-cover" style={{ 
                   width: 128, 
                   height: 193, 
-                  backgroundImage: `url("${this.props.imageLinks}")` }}>
+                  backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}>
               </div>
               <div className="book-shelf-changer">
                 <select 

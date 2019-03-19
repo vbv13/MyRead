@@ -10,7 +10,8 @@ class App extends Component {
     constructor() {
         super()
         this.state = {
-            allBooks: []
+            allBooks: [],
+            booksList: []
         }
     }
 
@@ -22,10 +23,11 @@ class App extends Component {
         })
     }
 
-    changeBookShelf = (book, shelf) => {     //we want to delete specific book from one shelf and add it to another
-        BooksAPI.update(book, shelf).then((books) => {
-            this.setState((state) => ({    //state - current state
-                allBooks: state.allBooks.filter((b) => b.id !== book.id).concat( [book] ) //book - book that was clicked on //b - state books id, b- current book
+    changeBookShelf = (book, newShelf) => {     //we want to delete specific book from one shelf and add it to another
+        BooksAPI.update(book, newShelf).then(() => {
+            book.shelf=newShelf
+            this.setState(state => ({    //state - current state
+                allBooks: state.allBooks.filter(b => b.id !== book.id).concat( [book] ) //book - book that was clicked on //b - state books id, b- current book
             }))
         })
     }
@@ -46,17 +48,17 @@ class App extends Component {
                         <BookShelf 
                             title="Currently Reading"
                             changeBookShelf={this.changeBookShelf}
-                            books={this.getCurrentShelf("Currently Reading")}
+                            books={this.getCurrentShelf("currentlyReading")}
                         />
                         <BookShelf 
                             title="Want to Read"
                             changeBookShelf={this.changeBookShelf}
-                            books={this.getCurrentShelf("Want to Read")}
+                            books={this.getCurrentShelf("wantToRead")}
                         />
                         <BookShelf 
                             title="Read"
                             changeBookShelf={this.changeBookShelf}
-                            books={this.getCurrentShelf("Read")}
+                            books={this.getCurrentShelf("read")}
                         />
                     </div>
                 </div>
@@ -74,7 +76,8 @@ class App extends Component {
                     {this.renderBookContent()}
                 <Route path='/search' render={({history}) => (
                     <BookSearch
-
+                        books = {this.state.allBooks}
+                        changeBookShelf={this.changeBookShelf}
                     />
                 )}
                 />

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from "./BooksAPI";
+import Book from "./Book";
 
 class BookSearch extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            BooksList: []
+            booksList: []
         }
     }
 
@@ -18,22 +19,21 @@ class BookSearch extends Component {
             BooksAPI.search(searchQuery, this.maximumOfBookObjects).then((searchableBooks) => {
                 if(searchableBooks.length) {
                     searchableBooks.forEach((book) => {
-                        let BooksInShelves = this.props.books.find((currentBook) => currentBook.id === book.id)
-                        if(BooksInShelves) {
-                            book.shelf = BooksInShelves.shelf
+                        let booksInShelves = this.props.books.find((currentBook) => currentBook.id === book.id);
+                        if(booksInShelves) {
+                            book.shelf = booksInShelves.shelf
                         } else {
                             book.shelf = 'none'
                         }
                     });
+                    this.setState({
+                        booksList: searchableBooks
+                    });
                 }
-                this.setState({
-                    BooksList: searchableBooks
-                });
             });
-        }
-        else {
+        } else {
             this.setState({
-                BooksList: ''
+                booksList: ''
             })
         }
     }
@@ -60,7 +60,16 @@ class BookSearch extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                <ol className="books-grid"></ol>
+                <ol className="books-grid">
+                        {this.state.booksList.map((book) => (
+                            <li key={book.id} className="book-list-item">
+                                <Book
+                                    book={book}
+                                    changeBookShelf={this.props.changeBookShelf}
+                                />
+                            </li>
+                        ))}
+                </ol>
                 </div>
           </div>
         );
