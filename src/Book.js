@@ -7,7 +7,7 @@ class Book extends Component {
       super(props);
       this.state = {
         currentShelfOfBook: this.props.book.shelf,
-        //updatingBookShelf: false
+        updatingBookShelf: false
       }
     }
 
@@ -15,15 +15,33 @@ class Book extends Component {
         this.props.changeBookShelf(this.props.book, event.target.value);
         this.setState({
           currentShelfOfBook: event.target.value,
-          //updatingBookShelf: true
+          updatingBookShelf: true
         })  
   }
 
-    /*componentWillReceiveProps() {
+    /*getDerivedStateFromProps () {
       this.setState({
         updatingBookShelf: false
       })
     }*/
+
+    getBookShelfChangeOption() {
+      return (
+        <div className="book-shelf-changer">
+        <select 
+            value={this.state.currentShelfOfBook}
+            onChange={this.changeBookShelf}
+        >
+          <option value="move" disabled>Move to...</option>
+          <option value="currentlyReading">Currently Reading</option>
+          <option value="wantToRead">Want to Read</option>
+          <option value="read">Read</option>
+          <option value="none">None</option>
+        </select>
+        { this.state.updatingBookShelf && (<div className="cssload-spin-box"></div>) }
+      </div>
+      )
+    }
 
     render() {
         return (
@@ -34,18 +52,8 @@ class Book extends Component {
                   height: 193, 
                   backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}>
               </div>
-              <div className="book-shelf-changer">
-                <select 
-                    value={this.state.currentShelfOfBook}
-                    onChange={this.changeBookShelf}
-                >
-                  <option value="move" disabled>Move to...</option>
-                  <option value="currentlyReading">Currently Reading</option>
-                  <option value="wantToRead">Want to Read</option>
-                  <option value="read">Read</option>
-                  <option value="none">None</option>
-                </select>
-              </div>
+
+                {this.getBookShelfChangeOption()}
             </div>
             <div className="book-title">{this.props.book.title}</div>
             <div className="book-authors">{this.props.book.authors}</div>
