@@ -34,7 +34,7 @@ class BookSearch extends Component {
             });
         } else {
             this.setState({
-                booksList: ''
+                booksList: []
             })
         }
     }
